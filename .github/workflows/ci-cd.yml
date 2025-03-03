@@ -12,9 +12,16 @@ jobs:
   validate-branch:
     runs-on: ubuntu-latest
     steps:
+      - name: pasrse data
+        id: parse-data
+        uses: tj-actions/branch-names@v8
+
       - name: Print info about actions
         run: |
-          echo "Some values"
+          echo "EVENT NAME: ${{ github.event_name }}"
+          echo "CURRENT BRANCH: ${{ steps.parse-data.outputs.current_branch }}"
+          echo "DEFAULT BRANCH: ${{ steps.parse-data.outputs.default_branch }}"
+          echo "OUTPUTS: ${{ steps.parse-data.outputs }}"
   print-data-information:
     runs-on: ubuntu-latest
     steps:
