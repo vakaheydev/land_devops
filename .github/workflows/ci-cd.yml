@@ -12,10 +12,14 @@ jobs:
   validate-branch:
     runs-on: ubuntu-latest
     steps:
-      - name: step1
+      - name: Print info about actions
         run: |
-          echo "name step 1"
-          echo "name step 1 - second command"
-      - name: step2
-        run: echo "name step 2"
+          echo "Some values"
+  print-data-information:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Second step
+        run: echo "Print info"
+      - name: 3 step
+        run: echo "Print info"
     
