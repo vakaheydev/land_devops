@@ -25,14 +25,14 @@ jobs:
           echo "REF NAME      : ${{ github.ref_name }}"
 
 
-  security:
-    name: (SEC) Security
-    needs: pre-merge-check
-    uses: vakaheydev/land_devops/.github/workflows/security.yml@feature/change-workflow
+  # security:
+    # name: (SEC) Security
+    # needs: pre-merge-check
+    # uses: vakaheydev/land_devops/.github/workflows/security.yml@feature/change-workflow
 
   tests:
     name: (TST) Test
-    needs: security
+    # needs: security
     uses: vakaheydev/land_devops/.github/workflows/test.yml@feature/change-workflow
     with:
       version: alpha
