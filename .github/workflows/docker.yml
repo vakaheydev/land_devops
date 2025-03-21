@@ -5,12 +5,11 @@ on:
             tag:
                 required: true
                 type: string 
-            dockerhub_login:
-                required: true
-                type: string
+        secrets:
             dockerhub_token:
                 required: true
-                type: string
+            dockerhub_login:
+                required: true 
 
 env:
     RELEASE_BRANCH: feature/test-workflow
