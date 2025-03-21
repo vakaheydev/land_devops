@@ -16,3 +16,4 @@
 [1.15.0 <- 1.14.0] [2025-03-21 16:51:01] - Feature/change workflow
 [1.16.0 <- 1.15.0] [2025-03-21 17:00:11] - feature/change-workflow added tg action
 [1.17.0 <- 1.16.0] [2025-03-21 17:05:55] - feature/change-workflow fixed update-version action
+[1.18.0 <- 1.17.0] [2025-03-21 17:15:36] - feature/change-workflow fixed update-version action
