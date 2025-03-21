@@ -1,0 +1,59 @@
+name: Update changelog
+on:
+  workflow_call:
+    
+jobs: 
+  update-version:
+    name: (VER) Version UP
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{steps.get-commit-txt.outputs.TAG_MSG}}
+    steps:     
+      - name: Сheckout on [${{ env.RELEASE_BRACH }}]
+        uses: actions/checkout@v4
+    
+      - name: Get branch names
+        id: branch-names
+        uses: tj-actions/branch-names@v8
+
+      - name: Print catalog's info
+        run : |
+          echo "path to version file ${{ env.VERSION_CATALOG }}"
+          
+      - name: Install and Setup python 
+        uses: actions/setup-python@v1
+        with:
+          python-version: "3.10"
+    
+      - name: Update version [minor]
+        if: startsWith(steps.branch-names.outputs.current_branch, 'feature')
+        run: 
+          python ${{ env.VERSION_SCRIPT }} ${{ env.VERSION_CATALOG }} upgrade_version ${{ env.MINOR }}
+ 
+      - name: Update version [patch]
+        if: startsWith(steps.branch-names.outputs.current_branch, 'hotfix')
+        run:
+          python ${{ env.VERSION_SCRIPT }} ${{ env.VERSION_CATALOG }} upgrade_version ${{ env.PATCH }}
+      
+      - name: Save Version and Log to env
+        id: get-commit-txt
+        run: | 
+          COMMIT_MSG=$(python ${{ env.VERSION_SCRIPT }} ${{ env.VERSION_CATALOG }} get_last_log_msg)
+          TAG_MSG=$(python ${{ env.VERSION_SCRIPT }} ${{ env.VERSION_CATALOG }} get_current_version)
+          echo "COMMIT_MSG=${COMMIT_MSG}" >> $GITHUB_ENV
+          echo "TAG_MSG=${TAG_MSG}" >> $GITHUB_ENV
+          echo "TAG_MSG=${TAG_MSG}" >> $GITHUB_OUTPUT
+      
+      - name: Setup git config
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+
+      - name: Update [version] and put [tag]. Commit and push
+        run: |
+          git add .
+          git commit -m "${{ env.COMMIT_MSG }}"
+          git tag -a v${{ env.TAG_MSG }} -m "update tag"
+          git push -u origin ${{ env.RELEASE_BRANCH }} --tags 
