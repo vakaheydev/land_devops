@@ -12,3 +12,7 @@ feature/change-workflow fixed update-version action
 ---
 #### [1.4.0] - 2025.03.21    feature/change-workflow 
 feature/change-workflow fixed update-version action
+
+---
+#### [1.5.0] - [2025.03.21 18:01:18]    feature/change-workflow 
+feature/change-workflow fixed update-version action
