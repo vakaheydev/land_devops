@@ -98,7 +98,7 @@ def get_args_map():
     version_type = sys.argv[2]
     command_type = 'none'
     
-    if args_len:
+    if args_len > 3:
         command_type = sys.argv[3]
 
     return {'catalog': version_catalog, 'version_type': version_type, 'command_type': command_type}
