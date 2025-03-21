@@ -1,6 +1,10 @@
 name: Update changelog
 on:
   workflow_call:
+
+env:
+    CHANGELOG_FILE: changedlog.md
+    RELEASE_BRANCH: feature/test-workflow
     
 jobs: 
   udpate_changelog:
@@ -32,7 +36,7 @@ jobs:
       - name: Commit and push
         run: |
           git add .
-          git commit -m "[${{ needs.update-version.outputs.tag }}] ${{ env.CHAGELOG_FILE }}"
+          git commit -m "[${{ needs.update-version.outputs.tag }}] ${{ env.CHANGELOG_FILE }}"
           git push -u origin ${{ env.RELEASE_BRANCH }} --tags 
 
       - uses: actions/upload-artifact@v4
