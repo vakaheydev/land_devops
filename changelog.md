@@ -8,3 +8,5 @@
 #### [1.15.0] - 2025.03.21    feature/change-workflow
 ---
 #### [1.16.0] - 2025.03.21    feature/change-workflow n 1.16.0
+---
+#### [1.17.0] - 2025.03.21    feature/change-workflow \n Initial version
