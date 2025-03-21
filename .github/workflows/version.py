@@ -37,7 +37,7 @@ def get_message():
 
 
 def upgrade_version(version_type, version_catalog):
-    old_version_list = get_version()
+    old_version_list = get_version(version_catalog)
 
     if old_version_list == [0, 0, 0]:
         print("Version file was created with initial version 1.0.0")
@@ -90,15 +90,15 @@ def is_file_exists(filename):
 
 
 def get_args_map():
-    try:
-        version_catalog = sys.argv[1]
-        version_type = sys.argv[2]
-    except IndexError as e:
-        return 'no'
-    
+    args_len = len(sys.argv)
+    if args_len < 2:
+        raise ValueError('Please, provide at least two arguments: catalog and version type')
+
+    version_catalog = sys.argv[1]
+    version_type = sys.argv[2]
     command_type = 'none'
     
-    if len(sys.argv) > 3:
+    if args_len:
         command_type = sys.argv[3]
 
     return {'catalog': version_catalog, 'version_type': version_type, 'command_type': command_type}
