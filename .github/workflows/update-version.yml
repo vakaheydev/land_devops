@@ -1,6 +1,13 @@
 name: Update changelog
 on:
   workflow_call:
+
+env:
+  RELEASE_BRANCH: feature/test-workflow
+  VERSION_CATALOG: ${{ github.workspace }}/version
+  VERSION_SCRIPT: .github/workflows/version.py
+  MINOR: minor
+  PATCH: patch
     
 jobs: 
   update-version:
@@ -11,7 +18,7 @@ jobs:
     outputs:
       tag: ${{steps.get-commit-txt.outputs.TAG_MSG}}
     steps:     
-      - name: Сheckout on [${{ env.RELEASE_BRACH }}]
+      - name: Сheckout on [${{ env.RELEASE_BRANCH }}]
         uses: actions/checkout@v4
     
       - name: Get branch names

@@ -9,10 +9,6 @@ on:
 
 
 env:
-  VERSION_CATALOG: ${{ github.workspace }}/version
-  VERSION_SCRIPT: .github/workflows/version.py
-  MINOR: minor
-  PATCH: patch
   CHANGELOG_FILE: changedlog.md
   RELEASE_BRANCH: feature/test-workflow
 
