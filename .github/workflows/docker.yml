@@ -46,15 +46,15 @@ jobs:
                 context: .
                 file: ./dockerfile
                 push: true
-                tags: ${{ secrets.DOCKER_HUB_LOGIN }}/${{env.REPO_NAME}}:v${{inputs.tag}}
+                tags: ${{ secrets.DOCKERHUB_LOGIN }}/${{env.REPO_NAME}}:v${{inputs.tag}}
 
         # update info about docker Readme file and description
         -   name: Docker Hub Description
             uses: peter-evans/dockerhub-description@v4
             with:
-                username: ${{ secrets.DOCKER_HUB_LOGIN }}
-                password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-                repository: ${{ secrets.DOCKER_HUB_LOGIN }}/${{env.CONTAINER_NAME}}
+                username: ${{ secrets.DOCKERHUB_LOGIN }}
+                password: ${{ secrets.DOCKERHUB_PASSWORD }}
+                repository: ${{ secrets.DOCKERHUB_LOGIN }}/${{env.CONTAINER_NAME}}
                 short-description: ${{ github.event.repository.description }}
                 readme-filepath: ./README.md
                 enable-url-completion: true
