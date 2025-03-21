@@ -72,12 +72,12 @@ jobs:
       - name: Update version [minor]
         if: startsWith(steps.branch-names.outputs.current_branch, 'feature')
         run: 
-          python ${{ env.VERSION_SCRIPT }} ${{ env.NAME_VERSION_CATALOG }} upgrade-version ${{ env.MINOR }}
+          python ${{ env.VERSION_SCRIPT }} ${{ env.NAME_VERSION_CATALOG }} upgrade_version ${{ env.MINOR }}
  
       - name: Update version [patch]
         if: startsWith(steps.branch-names.outputs.current_branch, 'hotfix')
         run:
-          python ${{ env.VERSION_SCRIPT }} ${{ env.NAME_VERSION_CATALOG }} upgrade-version ${{ env.PATCH }}
+          python ${{ env.VERSION_SCRIPT }} ${{ env.NAME_VERSION_CATALOG }} upgrade_version ${{ env.PATCH }}
       
       - name: Save Version and Log to env
         id: get-commit-txt
