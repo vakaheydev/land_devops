@@ -1,0 +1,47 @@
+name: Test
+on:
+  workflow_call:
+    inputs:  
+      version:
+        type: string
+        required: true
+jobs: 
+  unit: 
+    name: Unit-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run test
+        run: | 
+          echo "simple run test"
+
+  smoke: 
+    name: Smoke-test 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run test
+        run: | 
+          echo "simple run test"
+  
+  fazz:
+    name: Fazzing 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run test
+        run: | 
+          echo "simple run test"
+
+  integration:
+    name: Integration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run test
+        run: | 
+          echo "simple run test"
+
+  regress:
+    name: Regress
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run test
+        run: | 
+          echo "simple run test"

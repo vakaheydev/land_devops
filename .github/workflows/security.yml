@@ -1,0 +1,47 @@
+name: Security scan
+on:
+    workflow_call:
+
+jobs:
+    antivirus:
+        runs-on: ubuntu-latest
+        name: Antivirus
+        steps:
+        - uses: actions/checkout@v3
+          with: 
+            fetch-depth: '0'
+        - name: Git AV Scan
+          uses: djdefi/gitavscan@main
+          with:
+            full: '--full'
+
+    lint: 
+        runs-on: ubuntu-latest
+        name: Lint
+        steps:
+        -   name: first-step
+            run : | 
+                echo "all normal"
+    saas: 
+        runs-on: ubuntu-latest
+        name: SAAS
+        steps:
+        -   name: first-step
+            run : | 
+                echo "all normal"
+
+    dast: 
+        runs-on: ubuntu-latest
+        name: DAST
+        steps:
+        -   name: first-step
+            run : | 
+                echo "all normal"
+                
+    yast: 
+        runs-on: ubuntu-latest
+        name: YAST
+        steps:
+        -   name: first-step
+            run : | 
+                echo "all normal"
