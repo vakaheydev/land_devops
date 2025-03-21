@@ -11,9 +11,9 @@ def format_version(version_list):
 
 def get_version(version_catalog) -> list[int]:
     version = []
-    version_file_name = f"{version_catalog}/version"
+    version_file_name = f"{version_catalog}/version.txt"
     if not os.path.exists(version_file_name):
-        open(version_file_name, "w").close()
+        open(version_file_name, "x").close()
     with open(version_file_name, "r") as f:
         lines = f.readlines()
 
@@ -79,10 +79,10 @@ def log_version_into_file(new_version, old_version, message, version_catalog):
             f"[{format_version(new_version)} <- {format_version(old_version)}] [{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] - {message}\n")
 
 
-def get_log_msg_from_file(version_catalog):
+def get_last_log_msg_from_file(version_catalog):
     with open(f"{version_catalog}/version_log.txt", "r") as f:
         line = f.readline()
-        return line.split['-'][1:]
+        return line.split('-')[4].strip()
     
 
 def is_file_exists(filename):
@@ -94,24 +94,28 @@ def get_args_map():
     if args_len < 2:
         raise ValueError('Please, provide at least two arguments: catalog and version type')
 
-    version_catalog = sys.argv[1]
-    version_type = sys.argv[2]
-    command_type = 'none'
+    args_map = {}
+    args_map['catalog'] = sys.argv[1]
+    args_map['command_type'] = sys.argv[2]
     
-    if args_len > 3:
-        command_type = sys.argv[3]
+    if args_map['command_type'] == 'version_upgrade':
+        args_map['version_type'] = sys.argv[3]
 
-    return {'catalog': version_catalog, 'version_type': version_type, 'command_type': command_type}
+    return args_map
 
 
 args_map = get_args_map()
 command_type = args_map['command_type']
 version_catalog = args_map['catalog']
-version_type = args_map['version_type']
+
+print(f'Version catalog: {version_catalog}\nCommand type: {command_type}')
 
 if command_type == 'get_current_version':
-    print(format_version(get_version[version_catalog]))
+    print(format_version(get_version(version_catalog)))
 elif command_type == 'get_last_log_msg':
-    print(get_log_msg_from_file(version_catalog))
-else:
+    print(get_last_log_msg_from_file(version_catalog))
+elif command_type == 'upgrade_version':
+    version_type = args_map['version_type']
     upgrade_version(version_type, version_catalog)
+else:
+    raise ValueError("Unknow command type: " + command_type)
