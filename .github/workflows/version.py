@@ -40,7 +40,6 @@ def upgrade_version(version_type, version_catalog):
     old_version_list = get_version(version_catalog)
 
     if old_version_list == [0, 0, 0]:
-        print("Version file was created with initial version 1.0.0")
         log_version_into_file([1, 0, 0], [], "Initial version", version_catalog)
         write_version_into_file([1, 0, 0], version_catalog)
         return
@@ -112,8 +111,6 @@ def get_args_map():
 args_map = get_args_map()
 command_type = args_map['command_type']
 version_catalog = args_map['catalog']
-
-print(f'Version catalog: {version_catalog}\nCommand type: {command_type}')
 
 if command_type == 'get_current_version':
     print(format_version(get_version(version_catalog)))
