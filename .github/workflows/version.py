@@ -75,7 +75,7 @@ def write_version_into_file(version_list, version_catalog):
 def log_version_into_file(new_version, old_version, message, version_catalog):
     with open(f"{version_catalog}/version_log.txt", "a") as f:
         f.write(
-            f"[{format_version(new_version)} <- {format_version(old_version)}] [{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] - {message}\n")
+            f"[{format_version(new_version)} <- {format_version(old_version)}] [{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] | {message}\n")
 
 
 def get_last_log_msg_from_file(version_catalog):
@@ -86,7 +86,7 @@ def get_last_log_msg_from_file(version_catalog):
         line = f.readlines()[-1]
         if len(line) == 0:
             return '-'
-        return line.split('-')[4].strip()
+        return line.split('|')[1].strip()
     
 
 def is_file_exists(filename):
