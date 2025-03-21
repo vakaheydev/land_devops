@@ -35,12 +35,12 @@ jobs:
   security:
     name: (SEC) Security
     needs: pre-merge-check
-    uses: vakaheydev/land_devops/.github/workflows/security.yaml@release
+    uses: vakaheydev/land_devops/.github/workflows/security.yml@feature/change-workflow
 
   tests:
     name: (TST) Test
     needs: security
-    uses: vakaheydev/land_devops/.github/workflows/test.yaml@release
+    uses: vakaheydev/land_devops/.github/workflows/test.yml@feature/change-workflow
     with:
       version: alpha
 
