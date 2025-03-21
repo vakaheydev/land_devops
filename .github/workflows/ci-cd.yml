@@ -10,7 +10,7 @@ on:
 
 env:
   NAME_VERSION_CATALOG: ${{ github.workspace }}/version
-  VERSION_SCRIPT: .github/workflows/version_up.py
+  VERSION_SCRIPT: .github/workflows/version.py
   MINOR: minor
   PATCH: patch
   CHANGELOG_FILE: changedlog.md
