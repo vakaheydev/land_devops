@@ -72,7 +72,7 @@ jobs:
                     
                     Информация о Git-репозитории
                     <b>GIT MR</b> : <a href="${{ env.URL_REPO }}/pull/${{ env.PR_NUMBER }}">${{ env.PR_NUMBER }}</a>
-                    <b>GIT TAG</b>: <a href="${{ env.URL_REPO }}/releases/tag/v${{ steps.branch-names.outputs.tag }}">${{ inputs.tag }}</a>
+                    <b>GIT TAG</b>: <a href="${{ env.URL_REPO }}/releases/tag/v${{ inputs.tag }}">${{ inputs.tag }}</a>
                     
                     Информация о Docker-репозитории
                     <b>Владелец</b>: <a href="https://hub.docker.com/repositories/${{ secrets.DOCKERHUB_LOGIN }}">${{ secrets.DOCKERHUB_LOGIN }}</a>
