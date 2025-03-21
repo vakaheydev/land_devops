@@ -96,7 +96,7 @@ def get_args_map():
     except IndexError as e:
         return 'no'
     
-    if len(sys.argv) > 2:
+    if len(sys.argv) > 3:
         command_type = sys.argv[3]
 
     return {'catalog': version_catalog, 'version_type': version_type, 'command_type': command_type}
