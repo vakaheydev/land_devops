@@ -16,3 +16,5 @@
 #### [1.6.0] - 2025.03.21    feature/change-workflow
 ---
 #### [1.7.0] - 2025.03.21    feature/change-workflow
+---
+#### [1.8.0] - 2025.03.21    feature/change-workflow
