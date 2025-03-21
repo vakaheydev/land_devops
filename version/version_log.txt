@@ -13,3 +13,4 @@
 [1.12.0 <- 1.11.0] [2025-03-21 13:27:40] - Feature/change workflow
 [1.13.0 <- 1.12.0] [2025-03-21 13:32:36] - feature/change-workflow fixed bugs
 [1.14.0 <- 1.13.0] [2025-03-21 16:44:40] - feature/change-workflow fixed bugs
+[1.15.0 <- 1.14.0] [2025-03-21 16:51:01] - Feature/change workflow
