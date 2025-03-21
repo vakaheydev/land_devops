@@ -6,7 +6,6 @@ on:
 env:
     RELEASE_BRANCH: feature/test-workflow
 
-
 jobs:
     docker-push:
         name: (CI) Docker push
@@ -20,7 +19,7 @@ jobs:
         -   name: Prepare env 
             run: | 
                 echo "show variables"
-                echo [${{env.tag}}]
+                echo [${{env.TAG}}]
         -   name: Сheckout on [${{env.RELEASE_BRANCH}}] and v [${{env.TAG}}]
             uses: actions/checkout@v4
 
