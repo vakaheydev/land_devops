@@ -38,12 +38,12 @@ jobs:
       - name: Update version [minor]
         if: startsWith(steps.branch-names.outputs.current_branch, 'feature')
         run: 
-          python ${{ env.VERSION_SCRIPT }} ${{ env.VERSION_CATALOG }} upgrade_version ${{ env.MINOR }}
+          python ${{ env.VERSION_SCRIPT }} ${{ env.VERSION_CATALOG }} upgrade_version ${{ env.MINOR }} "${{ github.event.pull_request.title }}"
  
       - name: Update version [patch]
         if: startsWith(steps.branch-names.outputs.current_branch, 'hotfix')
         run:
-          python ${{ env.VERSION_SCRIPT }} ${{ env.VERSION_CATALOG }} upgrade_version ${{ env.PATCH }}
+          python ${{ env.VERSION_SCRIPT }} ${{ env.VERSION_CATALOG }} upgrade_version ${{ env.PATCH }} "${{ github.event.pull_request.title }}"
       
       - name: Save Version and Log to env
         id: get-commit-txt
