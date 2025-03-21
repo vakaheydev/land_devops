@@ -13,6 +13,7 @@ def get_version(version_catalog) -> list[int]:
     version = []
     version_file_name = f"{version_catalog}/version.txt"
     if not os.path.exists(version_file_name):
+
         open(version_file_name, "x").close()
     with open(version_file_name, "r") as f:
         lines = f.readlines()
@@ -80,8 +81,13 @@ def log_version_into_file(new_version, old_version, message, version_catalog):
 
 
 def get_last_log_msg_from_file(version_catalog):
+    version_file = f"{version_catalog}/version_log.txt"
+    if not os.path.exists(version_file):
+        open(f"{version_catalog}/version_log.txt", "x").close()
     with open(f"{version_catalog}/version_log.txt", "r") as f:
         line = f.readline()
+        if len(line) == 0:
+            return '-'
         return line.split('-')[4].strip()
     
 
