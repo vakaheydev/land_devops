@@ -8,10 +8,6 @@ on:
   workflow_dispatch: 
 
 
-env:
-  CHANGELOG_FILE: changedlog.md
-  RELEASE_BRANCH: feature/test-workflow
-
 jobs:
   pre-merge-check:
     name: (INF) Log Info
