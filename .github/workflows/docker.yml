@@ -44,7 +44,7 @@ jobs:
             uses: docker/build-push-action@v2
             with:
                 context: .
-                file: ./dockerfile
+                file: ./Dockerfile
                 push: true
                 tags: ${{ secrets.DOCKERHUB_LOGIN }}/${{env.REPO_NAME}}:v${{inputs.tag}}
 
