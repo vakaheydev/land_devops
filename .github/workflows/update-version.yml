@@ -3,6 +3,7 @@ on:
   workflow_call:
 
 env:
+  CHANGELOG_FILE: changedlog.md
   RELEASE_BRANCH: feature/test-workflow
   VERSION_CATALOG: ${{ github.workspace }}/version
   VERSION_SCRIPT: .github/workflows/version.py
@@ -64,3 +65,60 @@ jobs:
           git commit -m "${{ env.COMMIT_MSG }}"
           git tag -a v${{ env.TAG_MSG }} -m "update tag"
           git push -u origin ${{ env.RELEASE_BRANCH }} --tags 
+
+  udpate_changelog:
+    name: (VER) Changelog update
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+      id-token: write
+    runs-on: ubuntu-latest
+    steps:  
+      - name: Сheckout on [${{ env.RELEASE_BRANCH }}]
+        uses: actions/checkout@v4
+
+      - name: Pull commits
+        run: 
+          git pull
+      
+      - name: Update changelog.md
+        run: | 
+          echo "---" >> ${{ env.CHANGELOG_FILE }} 
+          echo "#### [${{ needs.update-version.outputs.tag }}] - $(date +"%Y.%m.%d")    ${{ github.event.pull_request.head.ref }}" >> ${{env.CHANGELOG_FILE}} 
+      
+      - name: Setup git config
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+      
+      - name: Commit and push
+        run: |
+          git add .
+          git commit -m "[${{ needs.update-version.outputs.tag }}] ${{ env.CHANGELOG_FILE }}"
+          git push -u origin ${{ env.RELEASE_BRANCH }} --tags 
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.CHANGELOG_FILE }}
+          path: ${{ env.CHANGELOG_FILE }}
+
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '${{ env.CHANGELOG_FILE }} был обновлен. Новая версия доступна в корне репозитория.'
+            })
+
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['changelog-${{ needs.update-version.outputs.tag }}']
+            })
