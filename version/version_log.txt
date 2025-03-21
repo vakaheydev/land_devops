@@ -8,3 +8,4 @@
 [1.7.0 <- 1.6.0] [2025-03-21 13:12:17] - feature/change-workflow fixed bugs in docker workflow
 [1.8.0 <- 1.7.0] [2025-03-21 13:14:20] - feature/change-workflow fixed bugs in docker workflow
 [1.9.0 <- 1.8.0] [2025-03-21 13:16:37] - feature/change-workflow fixed bugs in docker workflow
+[1.10.0 <- 1.9.0] [2025-03-21 13:18:28] - feature/change-workflow fixed bugs in docker workflow
