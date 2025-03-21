@@ -7,7 +7,7 @@ on:
         value: ${{ jobs.update-version.outputs.tag }}
 
 env:
-  CHANGELOG_FILE: changedlog.md
+  CHANGELOG_FILE: changelog.md
   RELEASE_BRANCH: feature/test-workflow
   VERSION_CATALOG: ${{ github.workspace }}/version
   VERSION_SCRIPT: .github/workflows/version.py
