@@ -83,7 +83,7 @@ def get_last_log_msg_from_file(version_catalog):
     if not os.path.exists(version_file):
         open(f"{version_catalog}/version_log.txt", "x").close()
     with open(f"{version_catalog}/version_log.txt", "r") as f:
-        line = f.readline()
+        line = f.readlines()[-1]
         if len(line) == 0:
             return '-'
         return line.split('-')[4].strip()
