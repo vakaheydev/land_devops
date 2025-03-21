@@ -68,14 +68,14 @@ jobs:
                     <b>Проект</b> : <code>${{ env.REPO_NAME }}</code>
                     <b>Версия</b> : <code>${{ inputs.tag }}</code>
                     <b>Дата</b>: <code>${{ steps.current-time.outputs.formattedTime }}</code>
-                    <b>Автор</b>: <a href="#">${{ github.event.pull_request.user.login }}</a>
+                    <b>Автор</b>: <a href="https://github.com/${{ github.event.pull_request.user.login }}">${{ github.event.pull_request.user.login }}</a>
                     
                     Информация о Git-репозитории
                     <b>GIT MR</b> : <a href="${{ env.URL_REPO }}/pull/${{ env.PR_NUMBER }}">${{ env.PR_NUMBER }}</a>
-                    <b>GIT TAG</b>: <a href="${{ env.URL_REPO }}releases/tag/v${{ steps.branch-names.outputs.tag }}">${{inputs.tag}}</a>
+                    <b>GIT TAG</b>: <a href="${{ env.URL_REPO }}/releases/tag/v${{ steps.branch-names.outputs.tag }}">${{ inputs.tag }}</a>
                     
                     Информация о Docker-репозитории
-                    <b>Владелец</b>: <a href="https://hub.docker.com/repositories/${{ secrets.DOCKER_HUB_LOGIN }}">${{ secrets.DOCKER_HUB_LOGIN }}</a>
-                    <b>Название</b>: <a href="https://hub.docker.com/repository/docker/${{ secrets.DOCKER_HUB_LOGIN }}/${{ env.REPO_NAME }}/general">${{ env.REPO_NAME }}</a>
-                    <b>Тег</b>: <a href="https://hub.docker.com/repository/docker/${{ secrets.DOCKER_HUB_LOGIN }}/${{ env.REPO_NAME }}/tags/v">${{ env.tag }}</a>
-                    <b>Полное имя</b>:  <a href="https://hub.docker.com/repository/docker/${{ secrets.DOCKER_HUB_LOGIN }}/${{ env.REPO_NAME }}/tags">${{ secrets.DOCKER_HUB_LOGIN }}/${{ env.REPO_NAME }}:v${{ inputs.tag }}</a>
+                    <b>Владелец</b>: <a href="https://hub.docker.com/repositories/${{ secrets.DOCKERHUB_LOGIN }}">${{ secrets.DOCKERHUB_LOGIN }}</a>
+                    <b>Название</b>: <a href="https://hub.docker.com/repository/docker/${{ secrets.DOCKERHUB_LOGIN }}/${{ env.REPO_NAME }}/general">${{ env.REPO_NAME }}</a>
+                    <b>Тег</b>: <a href="https://hub.docker.com/repository/docker/${{ secrets.DOCKERHUB_LOGIN }}/${{ env.REPO_NAME }}/tags/v">${{ inputs.tag }}</a>
+                    <b>Полное имя</b>:  <a href="https://hub.docker.com/repository/docker/${{ secrets.DOCKERHUB_LOGIN }}/${{ env.REPO_NAME }}/tags">${{ secrets.DOCKERHUB_LOGIN }}/${{ env.REPO_NAME }}:v${{ inputs.tag }}</a>

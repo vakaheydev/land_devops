@@ -22,6 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       tag: ${{steps.get-commit-txt.outputs.TAG_MSG}}
+      commit_msg: ${{steps.get-commit-txt.outputs.COMMIT_MSG}}
     steps:     
       - name: Сheckout on [${{ env.RELEASE_BRANCH }}]
         uses: actions/checkout@v4
@@ -57,6 +58,7 @@ jobs:
           echo "COMMIT_MSG=${COMMIT_MSG}" >> $GITHUB_ENV
           echo "TAG_MSG=${TAG_MSG}" >> $GITHUB_ENV
           echo "TAG_MSG=${TAG_MSG}" >> $GITHUB_OUTPUT
+          echo "COMMIT_MSG=${TAG_MSG}" >> $GITHUB_OUTPUT
       
       - name: Setup git config
         run: |
@@ -90,7 +92,7 @@ jobs:
       - name: Update changelog.md
         run: | 
           echo "---" >> ${{ env.CHANGELOG_FILE }} 
-          echo "#### [${{ needs.update-version.outputs.tag }}] - $(date +"%Y.%m.%d")    ${{ github.event.pull_request.head.ref }}" >> ${{env.CHANGELOG_FILE}} 
+          echo "#### [${{ needs.update-version.outputs.tag }}] - $(date +"%Y.%m.%d")    ${{ github.event.pull_request.head.ref }}" \n ${{ needs.update-version.outputs.COMMIT_MSG }} >> ${{ env.CHANGELOG_FILE }} 
       
       - name: Setup git config
         run: |
