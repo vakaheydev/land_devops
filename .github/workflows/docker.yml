@@ -1,7 +1,10 @@
 name: Docker push
 on:
-  workflow_call:
-
+    workflow_call:
+        inputs:
+            TAG:
+                required: true
+                type: string 
 
 env:
     RELEASE_BRANCH: feature/test-workflow
@@ -19,7 +22,7 @@ jobs:
         -   name: Prepare env 
             run: | 
                 echo "show variables"
-                echo [${{env.TAG}}]
+                echo [${{inputs.TAG}}]
         -   name: Сheckout on [${{env.RELEASE_BRANCH}}] and v [${{env.TAG}}]
             uses: actions/checkout@v4
 
