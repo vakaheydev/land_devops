@@ -2,12 +2,13 @@ name: Docker push
 on:
     workflow_call:
         inputs:
-            TAG:
+            tag:
                 required: true
                 type: string 
 
 env:
     RELEASE_BRANCH: feature/test-workflow
+    REPO_NAME: ${{ github.event.repository.name }}
 
 jobs:
     docker-push:
@@ -22,8 +23,8 @@ jobs:
         -   name: Prepare env 
             run: | 
                 echo "show variables"
-                echo [${{inputs.TAG}}]
-        -   name: Сheckout on [${{env.RELEASE_BRANCH}}] and v [${{env.TAG}}]
+                echo [${{inputs.tag}}]
+        -   name: Сheckout on [${{env.RELEASE_BRANCH}}] and v [${{inputs.tag}}]
             uses: actions/checkout@v4
 
         -   name: Log in to Docker Hub
@@ -38,7 +39,7 @@ jobs:
                 context: .
                 file: ./dockerfile
                 push: true
-                tags: ${{ secrets.DOCKER_HUB_LOGIN }}/${{env.REPO_NAME}}:v${{env.tag}}
+                tags: ${{ secrets.DOCKER_HUB_LOGIN }}/${{env.REPO_NAME}}:v${{inputs.tag}}
 
         # update info about docker Readme file and description
         -   name: Docker Hub Description
@@ -59,5 +60,5 @@ jobs:
                     issue_number: context.issue.number,
                     owner: context.repo.owner,
                     repo: context.repo.repo,
-                    labels: ['dockerhub','${{env.tag}}']
+                    labels: ['dockerhub','${{inputs.tag}}']
                     })
