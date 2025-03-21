@@ -96,6 +96,8 @@ def get_args_map():
     except IndexError as e:
         return 'no'
     
+    command_type = 'none'
+    
     if len(sys.argv) > 3:
         command_type = sys.argv[3]
 
