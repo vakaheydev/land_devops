@@ -12,3 +12,4 @@
 [1.11.0 <- 1.10.0] [2025-03-21 13:20:23] - feature/change-workflow fixed bugs in docker workflow
 [1.12.0 <- 1.11.0] [2025-03-21 13:27:40] - Feature/change workflow
 [1.13.0 <- 1.12.0] [2025-03-21 13:32:36] - feature/change-workflow fixed bugs
+[1.14.0 <- 1.13.0] [2025-03-21 16:44:40] - feature/change-workflow fixed bugs
