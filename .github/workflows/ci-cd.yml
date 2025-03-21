@@ -43,21 +43,13 @@ jobs:
     needs: tests
     permissions:
       contents: write
-
-  
-  changelog:
-    name: (VER) Changelog update
-    needs: update-version
-    uses: vakaheydev/land_devops/.github/workflows/changelog.yml@feature/change-workflow
-    permissions:
-      contents: write
       pull-requests: write
       repository-projects: write
       id-token: write
 
   build:
-    name: (BUILD)
-    needs: changelog
+    name: (BUILD) Build application
+    needs: update-version
     uses: vakaheydev/land_devops/.github/workflows/build.yml@feature/change-workflow
     permissions:
       contents: write
