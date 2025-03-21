@@ -27,11 +27,9 @@ jobs:
         -   name: Сheckout on [${{env.RELEASE_BRANCH}}] and v [${{inputs.tag}}]
             uses: actions/checkout@v4
 
-        -   name: Log in to Docker Hub
-            uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
-            with:
-                username: ${{ secrets.DOCKER_HUB_LOGIN }}
-                password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+        -   name: Login to DockerHub Registry
+            run: 
+                echo ${{ secrets.DOCKER_HUB_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_NAME }} --password-stdin
 
         -   name: Build and push Docker image to DockerHub
             uses: docker/build-push-action@v2
