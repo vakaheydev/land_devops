@@ -74,6 +74,7 @@ jobs:
       repository-projects: write
       id-token: write
     runs-on: ubuntu-latest
+    needs: update-version
     steps:  
       - name: Сheckout on [${{ env.RELEASE_BRANCH }}]
         uses: actions/checkout@v4
