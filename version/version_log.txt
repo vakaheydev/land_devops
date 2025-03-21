@@ -19,3 +19,4 @@
 [1.18.0 <- 1.17.0] [2025-03-21 17:15:36] - feature/change-workflow fixed update-version action
 [1.19.0 <- 1.18.0] [2025-03-21 17:18:57] - feature/change-workflow fixed update-version action
 [1.20.0 <- 1.19.0] [2025-03-21 17:23:32] | feature/change-workflow fixed python version script
+[1.21.0 <- 1.20.0] [2025-03-21 17:29:32] | feature/change-workflow fixed update-version action
