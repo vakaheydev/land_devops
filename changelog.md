@@ -18,4 +18,6 @@
 ---
 #### [1.20.0] - 2025.03.21    feature/change-workflow n feature/change-workflow fixed python version script
 ---
-#### [1.21.0] - 2025.03.21    feature/change-workflow
+#### [1.21.0] - 2025.03.21    feature/change-workflow---
+#### [1.22.0] - 2025.03.21    feature/change-workflow 
+ feature/change-workflow fixed update-version action
