@@ -98,7 +98,7 @@ def get_args_map():
     args_map['catalog'] = sys.argv[1]
     args_map['command_type'] = sys.argv[2]
     
-    if args_map['command_type'] == 'version_upgrade':
+    if args_map['command_type'] == 'upgrade_version':
         args_map['version_type'] = sys.argv[3]
 
     return args_map
