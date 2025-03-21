@@ -72,6 +72,19 @@ jobs:
       pull-requests: write
       repository-projects: write
       id-token: write
+
+
+  telegram_notification:
+    name: (TG) Telegram notification
+    needs: [docker, update-version]
+    uses: vakaheydev/land_devops/.github/workflows/telegram_notification.yml@feature/change-workflow  
+    with: 
+      tag: ${{needs.update-version.outputs.tag}}
+    secrets:
+      dockerhub_token: ${{ secrets.DOCKER_HUB_PASSWORD }}  
+      dockerhub_login: ${{ secrets.DOCKER_HUB_LOGIN }}
+      telegram_token: ${{ secrets.TELEGRAM_TOKEN }}
+      telegram_to: ${{ secrets.TELEGRAM_RECEIVER_ID }}
         
         
     
