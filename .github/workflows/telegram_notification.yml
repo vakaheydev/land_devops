@@ -51,8 +51,10 @@ jobs:
         -   name: Checkout on release
             uses: actions/checkout@v2
         
-        -   name: ${{ env.CHANGELOG_FILE }}
+        -   name: Download artifact ${{ env.CHANGELOG_FILE }}
             uses: actions/download-artifact@v4
+            with:
+                name: ${{ env.CHANGELOG_FILE }}
 
         -   name: send telegram message on push
             uses: appleboy/telegram-action@master
