@@ -1,6 +1,10 @@
 name: Update changelog
 on:
   workflow_call:
+    outputs:
+      tag: 
+        description: "Version tag"
+        value: ${{ jobs.update-version.outputs.tag }}
 
 env:
   CHANGELOG_FILE: changedlog.md
