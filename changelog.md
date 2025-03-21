@@ -4,3 +4,7 @@ Initial version
 ---$'\n'
 #### [1.2.0] - 2025.03.21    feature/change-workflow 
 feature/change-workflow test.txt changed
+/
+---
+#### [1.3.0] - 2025.03.21    feature/change-workflow 
+feature/change-workflow fixed update-version action
