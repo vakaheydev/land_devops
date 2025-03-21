@@ -110,9 +110,8 @@ version_catalog = args_map['catalog']
 version_type = args_map['version_type']
 
 if command_type == 'get_current_version':
-    print(get_version[version_catalog])
+    print(format_version(get_version[version_catalog]))
 elif command_type == 'get_last_log_msg':
     print(get_log_msg_from_file(version_catalog))
 else:
     upgrade_version(version_type, version_catalog)
-print('Version script executed successfully')

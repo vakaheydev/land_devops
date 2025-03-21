@@ -72,18 +72,18 @@ jobs:
       - name: Update version [minor]
         if: startsWith(steps.branch-names.outputs.current_branch, 'feature')
         run: 
-          python ${{env.VERSION_SCRIPT}} ${{ env.NAME_VERSION_CATALOG }} ${{ env.MINOR }}
+          python ${{ env.VERSION_SCRIPT }} ${{ env.NAME_VERSION_CATALOG }} ${{ env.MINOR }}
  
       - name: Update version [patch]
         if: startsWith(steps.branch-names.outputs.current_branch, 'hotfix')
         run:
-          python ${{env.VERSION_SCRIPT}} ${{ env.NAME_VERSION_CATALOG }} ${{ env.PATCH }}
+          python ${{ env.VERSION_SCRIPT }} ${{ env.NAME_VERSION_CATALOG }} ${{ env.PATCH }}
       
       - name: Save Version and Log to env
         id: get-commit-txt
         run: | 
-          COMMIT_MSG=$(python ${{env.VERSION_SCRIPT}} ${{ env.NAME_VERSION_CATALOG }} get_last_log_msg)
-          TAG_MSG=$(python ${{env.VERSION_SCRIPT}} ${{ env.NAME_VERSION_CATALOG }} get_current_version)
+          COMMIT_MSG=$(python ${{ env.VERSION_SCRIPT }} ${{ env.NAME_VERSION_CATALOG }} get_last_log_msg)
+          TAG_MSG=$(python ${{ env.VERSION_SCRIPT }} ${{ env.NAME_VERSION_CATALOG }} get_current_version)
           echo "COMMIT_MSG=${COMMIT_MSG}" >> $GITHUB_ENV
           echo "TAG_MSG=${TAG_MSG}" >> $GITHUB_ENV
           echo "TAG_MSG=${TAG_MSG}" >> $GITHUB_OUTPUT
