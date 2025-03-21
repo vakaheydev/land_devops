@@ -13,7 +13,6 @@ def get_version(version_catalog) -> list[int]:
     version = []
     version_file_name = f"{version_catalog}/version.txt"
     if not os.path.exists(version_file_name):
-
         open(version_file_name, "x").close()
     with open(version_file_name, "r") as f:
         lines = f.readlines()
@@ -30,7 +29,7 @@ def get_version(version_catalog) -> list[int]:
 
 def get_message():
     try:
-        msg = sys.argv[2]
+        msg = sys.argv[4]
     except IndexError as e:
         return "No message"
 
