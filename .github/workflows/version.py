@@ -41,7 +41,7 @@ def upgrade_version(version_type, version_catalog):
 
     if old_version_list == [0, 0, 0]:
         print("Version file was created with initial version 1.0.0")
-        log_version_into_file([1, 0, 0], [], "Initial version")
+        log_version_into_file([1, 0, 0], [], "Initial version", version_catalog)
         write_version_into_file([1, 0, 0], version_catalog)
         return
 
@@ -61,7 +61,7 @@ def upgrade_version(version_type, version_catalog):
 
     write_version_into_file(new_version_list, version_catalog)
     message = get_message()
-    log_version_into_file(new_version_list, old_version_list, message)
+    log_version_into_file(new_version_list, old_version_list, message, version_catalog)
     print(f"Version updated: {format_version(old_version_list)} -> {format_version(new_version_list)}")
 
 
