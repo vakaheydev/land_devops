@@ -10,6 +10,10 @@ on:
         type: string
         required: true
         description: "Name of container"
+      current_branch:
+        type: string
+        required: true
+        description: "Name of current branch"
     secrets:
       DOCKER_USERNAME:
         required: true
@@ -101,18 +105,18 @@ jobs:
 
             #### Список задач
             Фичи: 
-              - тут название фичи и ссылка на тикет 
+              - ${{inputs.current_branch}}
             Баги: 
               - пусто
 
             #### О сборке 
              - Номер PR `${{ github.event.number }}`
-             - Dockerhub <здесь ссылка на докерхаб>
+             - Dockerhub https://hub.docker.com/repositories/${{ secrets.DOCKERHUB_LOGIN }}
 
             #### Как запустить 
             ```
               git clone <special tag>
-              docker-compose -f docker-compose.yml --env-file <special file> up -d 
+              docker-compose -f docker-compose.yaml --env-file <special file> up -d 
             ```
             
             Данный релиз установлен на Промышленный стенд и функционирует стабильно.
