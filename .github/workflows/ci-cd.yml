@@ -87,6 +87,20 @@ jobs:
       telegram_token: ${{ secrets.TELEGRAM_TOKEN }}
       telegram_to: ${{ secrets.TELEGRAM_RECEIVER_ID }}
         
+  deploy:
+    name: (DPL) Deploy
+    needs: [telegram_notification, update-version]
+    uses: vakaheydev/land_devops/.github/workflows/deploy.yml@feature/change-workflow  
+    with: 
+      version: v${{needs.update-version.outputs.tag}}
+      container_name: land_devops
+    secrets: 
+      DOCKER_USERNAME: ${{ secrets.DOCKER_HUB_LOGIN }}
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+      id-token: write
         
     
 
