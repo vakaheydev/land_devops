@@ -94,8 +94,8 @@ jobs:
       
       - name: Update changelog.md
         run: | 
-          echo $'\n'"---" >> ${{ env.CHANGELOG_FILE }} 
-          echo "#### [${{ needs.update-version.outputs.tag }}] - [$(date +"%d.%m.%Y %H:%M:%S")]    ${{ github.event.pull_request.head.ref }}" $'\n'${{ needs.update-version.outputs.commit_msg }} >> ${{ env.CHANGELOG_FILE }} 
+          echo $'\n'"---" | cat - ${{ env.CHANGELOG_FILE }} > temp && mv temp ${{ env.CHANGELOG_FILE }}
+          echo "#### [${{ needs.update-version.outputs.tag }}] - [$(date +"%d.%m.%Y %H:%M:%S")]    ${{ github.event.pull_request.head.ref }}" $'\n'${{ needs.update-version.outputs.commit_msg }} | cat - ${{ env.CHANGELOG_FILE }} > temp && mv temp ${{ env.CHANGELOG_FILE }}
       
       - name: Setup git config
         run: |
