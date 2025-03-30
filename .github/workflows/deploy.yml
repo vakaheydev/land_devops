@@ -61,7 +61,7 @@ jobs:
 
       - name: Run container ${{env.IMAGE_NAME}} for file ${{ env.PROD_ENV }}
         run: |  
-          docker-compose -f docker-compose.yml --env-file ${{ env.PROD_ENV }} up -d 
+          docker-compose -f docker-compose.yaml --env-file ${{ env.PROD_ENV }} up -d 
 
       
 
