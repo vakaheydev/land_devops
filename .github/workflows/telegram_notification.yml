@@ -68,15 +68,15 @@ jobs:
                 document: ${{env.CHANGELOG_FILE}}
                 message: |           
                     Новый выпуск изменений
-                    <b>Проект</b> : <code>${{ env.REPO_NAME }}</code>
-                    <b>Версия</b> : <code>${{ inputs.tag }}</code>
+                    <b>Проект</b>: <code>${{ env.REPO_NAME }}</code>
+                    <b>Версия</b>: <code>${{ inputs.tag }}</code>
                     <b>Дата</b>: <code>${{ steps.current-time.outputs.formattedTime }}</code>
                     <b>Автор</b>: <a href="https://github.com/${{ github.event.pull_request.user.login }}">${{ github.event.pull_request.user.login }}</a>
-                    <b>Описание изменений:</b>: ${{ inputs.commit_msg }}
+                    <b>Описание изменений:</b> ${{ inputs.commit_msg }}
                     
 
                     Информация о Git-репозитории
-                    <b>GIT MR</b> : <a href="${{ env.URL_REPO }}/pull/${{ env.PR_NUMBER }}">${{ env.PR_NUMBER }}</a>
+                    <b>GIT MR</b>: <a href="${{ env.URL_REPO }}/pull/${{ env.PR_NUMBER }}">${{ env.PR_NUMBER }}</a>
                     <b>GIT TAG</b>: <a href="${{ env.URL_REPO }}/releases/tag/v${{ inputs.tag }}">${{ inputs.tag }}</a>
                     
                     Информация о Docker-репозитории
