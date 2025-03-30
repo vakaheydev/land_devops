@@ -1,3 +1,7 @@
+#### [1.2.0] - [30.03.2025 16:18:02]    feature/change-workflow 
+feature/change-workflow chaned workflow file
+
+---
 
 ---
 #### [1.0.0] - [21.03.2025 18:08:13]    feature/change-workflow 
