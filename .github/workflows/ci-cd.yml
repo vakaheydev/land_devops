@@ -41,6 +41,11 @@ jobs:
     name: (TST) Test
     needs: security
     uses: vakaheydev/land_devops/.github/workflows/test.yml@feature/change-workflow
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+      id-token: write
     with:
       version: alpha
 
