@@ -1,0 +1,71 @@
+name: Test
+on:
+  workflow_call:
+    inputs:  
+      version:
+        type: string
+        required: true
+
+env:
+  LABEL_TEST: test-passed
+
+jobs: 
+  unit: 
+    name: Unit-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run test
+        run: | 
+          echo "simple run test"
+
+  smoke: 
+    name: Smoke-test 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run test
+        run: | 
+          echo "simple run test"
+  
+  fazz:
+    name: Fazzing 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run test
+        run: | 
+          echo "simple run test"
+
+  integration:
+    name: Integration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run test
+        run: | 
+          echo "simple run test"
+
+  regress:
+    name: Regress
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run test
+        run: | 
+          echo "simple run test"
+
+  change-label:
+    needs: [regress, integration, fazz, smoke, unit]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+      id-token: write
+    steps: 
+    -   name: Add label to PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['${{ env.LABEL_TEST }}']
+            })

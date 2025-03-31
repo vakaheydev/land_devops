@@ -1,32 +1,122 @@
-name: Version update pipeline
+name: Version update and deploy to Docker pipeline
 
 on: 
   pull_request:
     types: [closed]
     branches:
     - release
-    - main
-env:
-  NAME_VERSION_FILE: version
+  workflow_dispatch: 
+
+
 jobs:
-  validate-branch:
+  pre-merge-check:
+    name: (INF) Log Info
     runs-on: ubuntu-latest
+    outputs:
+      current_branch: ${{ steps.branch-names.outputs.current_branch }}
     steps:
-      - name: pasrse data
-        id: parse-data
+      - name: Get branch names
+        id: branch-names
         uses: tj-actions/branch-names@v8
 
-      - name: Print info about actions
+      - name: Log Info
+        id: log-info
         run: |
-          echo "EVENT NAME: ${{ github.event_name }}"
-          echo "CURRENT BRANCH: ${{ steps.parse-data.outputs.current_branch }}"
-          echo "DEFAULT BRANCH: ${{ steps.parse-data.outputs.default_branch }}"
-          echo "OUTPUTS: ${{ steps.parse-data.outputs }}"
-  print-data-information:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Second step
-        run: echo "Print info"
-      - name: 3 step
-        run: echo "Print info"
+          echo "EVENT NAME    : ${{ github.event_name }}"
+          echo "CURRENT BRANCH: ${{ steps.branch-names.outputs.current_branch }}"
+          echo "REF NAME      : ${{ github.ref_name }}"
+
+
+  security:
+    name: (SEC) Security
+    needs: pre-merge-check
+    uses: vakaheydev/land_devops/.github/workflows/security.yml@feature/change-workflow
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+      id-token: write
+
+  tests:
+    name: (TST) Test
+    needs: security
+    uses: vakaheydev/land_devops/.github/workflows/test.yml@feature/change-workflow
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+      id-token: write
+    with:
+      version: alpha
+
+  update-version:
+    name: (VER) Version UP
+    uses: vakaheydev/land_devops/.github/workflows/update-version.yml@feature/change-workflow
+    needs: tests
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+      id-token: write
+
+  build:
+    name: (BUILD) Build application
+    needs: update-version
+    uses: vakaheydev/land_devops/.github/workflows/build.yml@feature/change-workflow
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+      id-token: write
+
+
+  docker:
+    name: (CI) Docker push
+    needs: [build, update-version]
+    uses: vakaheydev/land_devops/.github/workflows/docker.yml@feature/change-workflow  
+    with:
+      tag: ${{ needs.update-version.outputs.tag }}
+    secrets:
+      dockerhub_token: ${{ secrets.DOCKER_HUB_PASSWORD }}  
+      dockerhub_login: ${{ secrets.DOCKER_HUB_LOGIN }}
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+      id-token: write
+
+
+  telegram_notification:
+    name: (TG) Telegram notification
+    needs: [docker, update-version]
+    uses: vakaheydev/land_devops/.github/workflows/telegram_notification.yml@feature/change-workflow  
+    with: 
+      tag: ${{needs.update-version.outputs.tag}}
+      commit_msg: ${{ needs.update-version.outputs.commit_msg }}
+    secrets:
+      dockerhub_token: ${{ secrets.DOCKER_HUB_PASSWORD }}  
+      dockerhub_login: ${{ secrets.DOCKER_HUB_LOGIN }}
+      telegram_token: ${{ secrets.TELEGRAM_TOKEN }}
+      telegram_to: ${{ secrets.TELEGRAM_RECEIVER_ID }}
+        
+  deploy:
+    name: (DPL) Deploy
+    needs: [telegram_notification, pre-merge-check, update-version]
+    uses: vakaheydev/land_devops/.github/workflows/deploy.yml@feature/change-workflow  
+    with: 
+      version: v${{needs.update-version.outputs.tag}}
+      container_name: land_devops
+      current_branch: ${{needs.pre-merge-check.outputs.current_branch}}
+    secrets: 
+      DOCKER_USERNAME: ${{ secrets.DOCKER_HUB_LOGIN }}
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+      id-token: write
+        
     
+
+
+
+  
