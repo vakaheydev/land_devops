@@ -31,6 +31,11 @@ jobs:
     name: (SEC) Security
     needs: pre-merge-check
     uses: vakaheydev/land_devops/.github/workflows/security.yml@feature/change-workflow
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+      id-token: write
 
   tests:
     name: (TST) Test
