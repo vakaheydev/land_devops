@@ -34,7 +34,7 @@ jobs:
   security:
     name: (SEC) Security
     needs: pre-merge-check
-    uses: vakaheydev/land_devops/.github/workflows/security.yml@feature/change-workflow
+    uses: vakaheydev/land_devops/.github/workflows/security.yml@release
     permissions:
       contents: write
       pull-requests: write
@@ -44,7 +44,7 @@ jobs:
   tests:
     name: (TST) Test
     needs: security
-    uses: vakaheydev/land_devops/.github/workflows/test.yml@feature/change-workflow
+    uses: vakaheydev/land_devops/.github/workflows/test.yml@release
     permissions:
       contents: write
       pull-requests: write
@@ -56,7 +56,7 @@ jobs:
   update-version:
     needs: [tests, pre-merge-check]
     name: (VER) Version UP
-    uses: vakaheydev/land_devops/.github/workflows/update-version.yml@feature/change-workflow
+    uses: vakaheydev/land_devops/.github/workflows/update-version.yml@release
     with:
       release_branch: ${{ needs.pre-merge-check.outputs.RELEASE_BRANCH }}
     permissions:
@@ -68,7 +68,7 @@ jobs:
   build:
     name: (BUILD) Build application
     needs: update-version
-    uses: vakaheydev/land_devops/.github/workflows/build.yml@feature/change-workflow
+    uses: vakaheydev/land_devops/.github/workflows/build.yml@release
     permissions:
       contents: write
       pull-requests: write
@@ -79,7 +79,7 @@ jobs:
   docker:
     name: (CI) Docker push
     needs: [build, update-version, pre-merge-check]
-    uses: vakaheydev/land_devops/.github/workflows/docker.yml@feature/change-workflow  
+    uses: vakaheydev/land_devops/.github/workflows/docker.yml@release 
     with:
       tag: ${{ needs.update-version.outputs.tag }}
       release_branch: ${{ needs.pre-merge-check.outputs.RELEASE_BRANCH }}
@@ -96,7 +96,7 @@ jobs:
   telegram_notification:
     name: (TG) Telegram notification
     needs: [docker, update-version]
-    uses: vakaheydev/land_devops/.github/workflows/telegram_notification.yml@feature/change-workflow  
+    uses: vakaheydev/land_devops/.github/workflows/telegram_notification.yml@release
     with: 
       tag: ${{needs.update-version.outputs.tag}}
       commit_msg: ${{ needs.update-version.outputs.commit_msg }}
@@ -109,7 +109,7 @@ jobs:
   deploy:
     name: (DPL) Deploy
     needs: [telegram_notification, pre-merge-check, update-version]
-    uses: vakaheydev/land_devops/.github/workflows/deploy.yml@feature/change-workflow  
+    uses: vakaheydev/land_devops/.github/workflows/deploy.yml@release
     with: 
       version: v${{needs.update-version.outputs.tag}}
       container_name: land_devops
