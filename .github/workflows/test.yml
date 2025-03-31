@@ -51,6 +51,7 @@ jobs:
           echo "simple run test"
 
   change-label:
+    needs: [regress, integration, fazz, smoke, unit]
     runs-on: ubuntu-latest
     permissions:
       contents: write
