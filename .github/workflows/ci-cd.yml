@@ -4,7 +4,7 @@ on:
   pull_request:
     types: [closed]
     branches:
-    - feature/test-workflow
+    - release
   workflow_dispatch: 
 
 
