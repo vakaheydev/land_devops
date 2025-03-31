@@ -23,7 +23,7 @@ env:
   TAG: ${{ inputs.version || 'latest' }}
   CONTAINER_NAME: ${{ inputs.container_name || format('land_devops:v{0}', inputs.version)}}
   PROD_ENV: "prod.env"
-  IMAGE_NAME: ${{secrets.DOCKER_USERNAME}}/${{ inputs.container_name}}:${{inputs.version}} 
+  IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/${{ inputs.container_name}}:${{ inputs.version }} 
   LABEL_PROD: "PROD"
   LABEL_EX_PROD: "EX_PROD"
 
@@ -35,7 +35,7 @@ jobs:
         environment: [dev,test,stage]
     steps:
       - name: Deploy to stands
-        run: echo "start on ${{matrix.environment}}"
+        run: echo "start on ${{ matrix.environment }}"
 
   deploy-prod: 
     environment: prod
@@ -63,7 +63,7 @@ jobs:
           Add-Content ${{ env.PROD_ENV }} "CONTAINER_NAME=${{ env.CONTAINER_NAME }}"
           Add-Content ${{ env.PROD_ENV }} "DOCKER_HUB_IMAGE = ${{ env.IMAGE_NAME }}"
 
-      - name: Run container ${{env.IMAGE_NAME}} for file ${{ env.PROD_ENV }}
+      - name: Run container ${{ env.IMAGE_NAME }} for file ${{ env.PROD_ENV }}
         run: |  
           docker-compose -f docker-compose.yaml --env-file ${{ env.PROD_ENV }} up -d 
 
@@ -81,7 +81,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              labels: ['${{env.LABEL_PROD}}']
+              labels: ['${{ env.LABEL_PROD }}']
             })
 
   create-releae: 
@@ -111,7 +111,7 @@ jobs:
 
             #### О сборке 
              - Номер PR `${{ github.event.number }}`
-             - Dockerhub https://hub.docker.com/repositories/${{ secrets.DOCKERHUB_LOGIN }}
+             - Dockerhub https://hub.docker.com/repositories/${{ secrets.DOCKER_USERNAME }}
 
             #### Как запустить 
             ```
