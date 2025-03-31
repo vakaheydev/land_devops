@@ -50,6 +50,7 @@ jobs:
                 echo "all normal"
 
     change-label:
+        needs: [yast, dast, saas, lint, antivirus]
         permissions:
             contents: write
             pull-requests: write
