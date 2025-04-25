@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: task-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: land-devops
+  template:
+    metadata:
+      labels:
+        app: land-devops
+    spec:
+      containers:
+        - name: land-devops
+          image: vakadev/land_devops:v1.1.1
+          ports:
+            - containerPort: 80
