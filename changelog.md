@@ -1,3 +1,7 @@
+#### [1.3.0] - [25.04.2025 08:57:59]    feature/k8s 
+feature/k8s test changes
+
+---
 #### [1.2.0] - [25.04.2025 08:46:57]    feature/k8s 
 feature/k8s added k8s files
 
