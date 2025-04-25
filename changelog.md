@@ -1,3 +1,7 @@
+#### [1.2.0] - [25.04.2025 08:46:57]    feature/k8s 
+feature/k8s added k8s files
+
+---
 #### [1.1.1] - [31.03.2025 15:14:49]    hotfix/key-1 
 hotfix/key-1 fixed workflow
 
