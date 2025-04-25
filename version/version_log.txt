@@ -1,3 +1,4 @@
 [1.0.0 <- ] [2025-03-31 14:59:24] | Initial version
 [1.1.0 <- 1.0.0] [2025-03-31 15:06:49] | feature/change-workflow deleted test files
 [1.1.1 <- 1.1.0] [2025-03-31 15:14:35] | hotfix/key-1 fixed workflow
+[1.2.0 <- 1.1.1] [2025-04-25 08:46:49] | feature/k8s added k8s files
