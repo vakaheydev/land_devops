@@ -1,3 +1,7 @@
+#### [1.5.0] - [25.04.2025 09:12:19]    feature/k8s 
+feature/k8s added update strategy
+
+---
 #### [1.4.0] - [25.04.2025 09:03:58]    feature/k8s 
 feature/k8s refactoring
 
