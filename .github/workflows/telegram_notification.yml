@@ -1,0 +1,86 @@
+name: Telegram notification
+on:
+    workflow_call:
+        inputs:
+            tag:
+                required: true
+                type: string
+            commit_msg:
+                required: true
+                type: string
+        secrets:
+            dockerhub_token:
+                required: true
+            dockerhub_login:
+                required: true 
+            telegram_token:
+                required: true
+            telegram_to:
+                required: true
+
+
+env:
+    REPO_NAME: ${{ github.event.repository.name }}
+    CHANGELOG_FILE: changelog.md
+    PR_NUMBER: ${{ github.event.number }}
+    URL_REPO: ${{ github.server_url }}/${{ github.repository }}
+
+
+jobs:
+    final-notify:
+        name: (TG) Notify final
+        runs-on: ubuntu-latest
+        steps:
+        -   name: Get branch names
+            id: branch-names
+            uses: tj-actions/branch-names@v8
+
+        -   name: Get current time
+            uses: josStorer/get-current-time@v2
+            id: current-time
+            with:
+                format: YYYY.MM.DD HH:mm:ss
+                utcOffset: "+08:00"
+        
+        -   name: Use current time
+            env:
+                TIME: "${{ steps.current-time.outputs.time }}"
+                R_TIME: "${{ steps.current-time.outputs.readableTime }}"
+                F_TIME: "${{ steps.current-time.outputs.formattedTime }}"
+                YEAR: "${{ steps.current-time.outputs.year }}"
+                DAY: "${{ steps.current-time.outputs.day }}"
+            run: echo $TIME $R_TIME $F_TIME $YEAR $DAY
+
+        -   name: Checkout on release
+            uses: actions/checkout@v2
+        
+        -   name: Download artifact ${{ env.CHANGELOG_FILE }}
+            uses: actions/download-artifact@v4
+            with:
+                name: ${{ env.CHANGELOG_FILE }}
+
+        -   name: send telegram message on push
+            uses: appleboy/telegram-action@master
+            with:
+                to: ${{ secrets.TELEGRAM_TO }}
+                token: ${{ secrets.TELEGRAM_TOKEN }}
+                format: html
+                document: ${{env.CHANGELOG_FILE}}
+                message: |           
+                    Новый выпуск изменений
+                    <b>Проект</b>: <code>${{ env.REPO_NAME }}</code>
+                    <b>Версия</b>: <code>${{ inputs.tag }}</code>
+                    <b>Дата</b>: <code>${{ steps.current-time.outputs.formattedTime }}</code>
+                    <b>Автор</b>: <a href="https://github.com/${{ github.event.pull_request.user.login }}">${{ github.event.pull_request.user.login }}</a>
+                    <b>Описание изменений:</b> ${{ inputs.commit_msg }}
+                    
+
+                    Информация о Git-репозитории
+                    <b>GIT MR</b>: <a href="${{ env.URL_REPO }}/pull/${{ env.PR_NUMBER }}">${{ env.PR_NUMBER }}</a>
+                    <b>GIT TAG</b>: <a href="${{ env.URL_REPO }}/releases/tag/v${{ inputs.tag }}">${{ inputs.tag }}</a>
+                    
+                    Информация о Docker-репозитории
+                    <b>Владелец</b>: <a href="https://hub.docker.com/repositories/${{ secrets.DOCKERHUB_LOGIN }}">${{ secrets.DOCKERHUB_LOGIN }}</a>
+                    <b>Название</b>: <a href="https://hub.docker.com/repository/docker/${{ secrets.DOCKERHUB_LOGIN }}/${{ env.REPO_NAME }}/general">${{ env.REPO_NAME }}</a>
+                    <b>Тег</b>: <a href="https://hub.docker.com/repository/docker/${{ secrets.DOCKERHUB_LOGIN }}/${{ env.REPO_NAME }}/tags">${{ inputs.tag }}</a>
+                    <b>Полное имя</b>:  <a href="https://hub.docker.com/repository/docker/${{ secrets.DOCKERHUB_LOGIN }}/${{ env.REPO_NAME }}/tags">${{ secrets.DOCKERHUB_LOGIN }}/${{ env.REPO_NAME }}:v${{ inputs.tag }}</a>

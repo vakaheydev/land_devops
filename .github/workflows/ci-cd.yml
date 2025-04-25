@@ -1,0 +1,129 @@
+name: Version update and deploy to Docker pipeline
+
+on: 
+  pull_request:
+    types: [closed]
+    branches:
+    - release
+  workflow_dispatch: 
+
+env:
+  RELEASE_BRANCH: release
+
+
+jobs:
+  pre-merge-check:
+    name: (INF) Log Info
+    runs-on: ubuntu-latest
+    outputs:
+      release_branch: ${{ env.RELEASE_BRANCH }}
+      current_branch: ${{ steps.branch-names.outputs.current_branch }}
+    steps:
+      - name: Get branch names
+        id: branch-names
+        uses: tj-actions/branch-names@v8
+
+      - name: Log Info
+        id: log-info
+        run: |
+          echo "EVENT NAME    : ${{ github.event_name }}"
+          echo "CURRENT BRANCH: ${{ steps.branch-names.outputs.current_branch }}"
+          echo "REF NAME      : ${{ github.ref_name }}"
+
+
+  security:
+    name: (SEC) Security
+    needs: pre-merge-check
+    uses: vakaheydev/land_devops/.github/workflows/security.yml@release
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+      id-token: write
+
+  tests:
+    name: (TST) Test
+    needs: security
+    uses: vakaheydev/land_devops/.github/workflows/test.yml@release
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+      id-token: write
+    with:
+      version: alpha
+
+  update-version:
+    needs: [tests, pre-merge-check]
+    name: (VER) Version UP
+    uses: vakaheydev/land_devops/.github/workflows/update-version.yml@release
+    with:
+      release_branch: ${{ needs.pre-merge-check.outputs.RELEASE_BRANCH }}
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+      id-token: write
+
+  build:
+    name: (BUILD) Build application
+    needs: update-version
+    uses: vakaheydev/land_devops/.github/workflows/build.yml@release
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+      id-token: write
+
+
+  docker:
+    name: (CI) Docker push
+    needs: [build, update-version, pre-merge-check]
+    uses: vakaheydev/land_devops/.github/workflows/docker.yml@release 
+    with:
+      tag: ${{ needs.update-version.outputs.tag }}
+      release_branch: ${{ needs.pre-merge-check.outputs.RELEASE_BRANCH }}
+    secrets:
+      dockerhub_token: ${{ secrets.DOCKER_HUB_PASSWORD }}  
+      dockerhub_login: ${{ secrets.DOCKER_HUB_LOGIN }}
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+      id-token: write
+
+
+  telegram_notification:
+    name: (TG) Telegram notification
+    needs: [docker, update-version]
+    uses: vakaheydev/land_devops/.github/workflows/telegram_notification.yml@release
+    with: 
+      tag: ${{needs.update-version.outputs.tag}}
+      commit_msg: ${{ needs.update-version.outputs.commit_msg }}
+    secrets:
+      dockerhub_token: ${{ secrets.DOCKER_HUB_PASSWORD }}  
+      dockerhub_login: ${{ secrets.DOCKER_HUB_LOGIN }}
+      telegram_token: ${{ secrets.TELEGRAM_TOKEN }}
+      telegram_to: ${{ secrets.TELEGRAM_RECEIVER_ID }}
+        
+  deploy:
+    name: (DPL) Deploy
+    needs: [telegram_notification, pre-merge-check, update-version]
+    uses: vakaheydev/land_devops/.github/workflows/deploy.yml@release
+    with: 
+      version: v${{needs.update-version.outputs.tag}}
+      container_name: land_devops
+      current_branch: ${{needs.pre-merge-check.outputs.current_branch}}
+    secrets: 
+      DOCKER_USERNAME: ${{ secrets.DOCKER_HUB_LOGIN }}
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+      id-token: write
+        
+    
+
+
+
+  

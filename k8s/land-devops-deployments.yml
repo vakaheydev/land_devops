@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: task-deployment
+spec:
+  replicas: 3
+  strategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxSurge: 1
+          maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: land-devops
+  template:
+    metadata:
+      labels:
+        app: land-devops
+    spec:
+      containers:
+        - name: land-devops
+          image: vakadev/land_devops:v1.4.0
+          ports:
+            - containerPort: 80
+    

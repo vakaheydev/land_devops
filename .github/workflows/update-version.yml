@@ -1,0 +1,138 @@
+name: Update changelog
+on:
+  workflow_call:
+    inputs:
+      release_branch:
+        required: true
+        type: string
+        description: "Release branch name"
+    outputs:
+      tag: 
+        description: "Version tag"
+        value: ${{ jobs.update-version.outputs.tag }}
+      commit_msg: 
+        description: "Commit message"
+        value: ${{ jobs.update-version.outputs.commit_msg }}
+
+env:
+  CHANGELOG_FILE: changelog.md
+  VERSION_CATALOG: ${{ github.workspace }}/version
+  VERSION_SCRIPT: .github/workflows/version.py
+  MINOR: minor
+  PATCH: patch
+    
+jobs: 
+  update-version:
+    name: (VER) Version UP
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{steps.get-commit-txt.outputs.TAG_MSG}}
+      commit_msg: ${{steps.get-commit-txt.outputs.COMMIT_MSG}}
+    steps:     
+      - name: Сheckout on [${{ inputs.release_branch }}]
+        uses: actions/checkout@v4
+    
+      - name: Get branch names
+        id: branch-names
+        uses: tj-actions/branch-names@v8
+
+      - name: Print catalog's info
+        run : |
+          echo "path to version file ${{ env.VERSION_CATALOG }}"
+          
+      - name: Install and Setup python 
+        uses: actions/setup-python@v1
+        with:
+          python-version: "3.10"
+    
+      - name: Update version [minor]
+        if: startsWith(steps.branch-names.outputs.current_branch, 'feature')
+        run: 
+          python ${{ env.VERSION_SCRIPT }} ${{ env.VERSION_CATALOG }} upgrade_version ${{ env.MINOR }} "${{ github.event.pull_request.title }}"
+ 
+      - name: Update version [patch]
+        if: startsWith(steps.branch-names.outputs.current_branch, 'hotfix')
+        run:
+          python ${{ env.VERSION_SCRIPT }} ${{ env.VERSION_CATALOG }} upgrade_version ${{ env.PATCH }} "${{ github.event.pull_request.title }}"
+      
+      - name: Save Version and Log to env
+        id: get-commit-txt
+        run: | 
+          COMMIT_MSG=$(python ${{ env.VERSION_SCRIPT }} ${{ env.VERSION_CATALOG }} get_last_log_msg)
+          TAG_MSG=$(python ${{ env.VERSION_SCRIPT }} ${{ env.VERSION_CATALOG }} get_current_version)
+          echo "COMMIT_MSG=${COMMIT_MSG}" >> $GITHUB_ENV
+          echo "TAG_MSG=${TAG_MSG}" >> $GITHUB_ENV
+          echo "TAG_MSG=${TAG_MSG}" >> $GITHUB_OUTPUT
+          echo "COMMIT_MSG=${COMMIT_MSG}" >> $GITHUB_OUTPUT
+      
+      - name: Setup git config
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+
+      - name: Update [version] and put [tag]. Commit and push
+        run: |
+          git add .
+          git commit -m "${{ env.COMMIT_MSG }}"
+          git tag -a v${{ env.TAG_MSG }} -m "update tag"
+          git push -u origin ${{ inputs.release_branch }} --tags 
+
+  udpate_changelog:
+    name: (VER) Changelog update
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+      id-token: write
+    runs-on: ubuntu-latest
+    needs: update-version
+    steps:  
+      - name: Сheckout on [${{ inputs.release_branch }}]
+        uses: actions/checkout@v4
+
+      - name: Pull commits
+        run: 
+          git pull
+      
+      - name: Update changelog.md
+        run: | 
+          echo $'\n'"---" | cat - ${{ env.CHANGELOG_FILE }} > temp && mv temp ${{ env.CHANGELOG_FILE }}
+          echo "#### [${{ needs.update-version.outputs.tag }}] - [$(date +"%d.%m.%Y %H:%M:%S")]    ${{ github.event.pull_request.head.ref }}" $'\n'${{ needs.update-version.outputs.commit_msg }} | cat - ${{ env.CHANGELOG_FILE }} > temp && mv temp ${{ env.CHANGELOG_FILE }}
+      
+      - name: Setup git config
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+      
+      - name: Commit and push
+        run: |
+          git add .
+          git commit -m "[${{ needs.update-version.outputs.tag }}] ${{ env.CHANGELOG_FILE }}"
+          git push -u origin ${{ inputs.release_branch }} --tags 
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.CHANGELOG_FILE }}
+          path: ${{ env.CHANGELOG_FILE }}
+
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Файл ${{ env.CHANGELOG_FILE }} был обновлен. Новая версия доступна в корне репозитория.'
+            })
+
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['changelog-${{ needs.update-version.outputs.tag }}']
+            })

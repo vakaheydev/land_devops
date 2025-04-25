@@ -1,0 +1,70 @@
+name: Security scan
+on:
+    workflow_call:
+
+env:
+    LABEL_SEC: sec-passed
+
+jobs:
+    antivirus:
+        runs-on: ubuntu-latest
+        name: Antivirus
+        steps:
+        - uses: actions/checkout@v3
+          with: 
+            fetch-depth: '0'
+        - name: Git AV Scan
+          uses: djdefi/gitavscan@main
+          with:
+            full: '--full'
+
+    lint: 
+        runs-on: ubuntu-latest
+        name: Lint
+        steps:
+        -   name: first-step
+            run : | 
+                echo "all normal"
+    saas: 
+        runs-on: ubuntu-latest
+        name: SAAS
+        steps:
+        -   name: first-step
+            run : | 
+                echo "all normal"
+
+    dast: 
+        runs-on: ubuntu-latest
+        name: DAST
+        steps:
+        -   name: first-step
+            run : | 
+                echo "all normal"
+                
+    yast: 
+        runs-on: ubuntu-latest
+        name: YAST
+        steps:
+        -   name: first-step
+            run : | 
+                echo "all normal"
+
+    change-label:
+        needs: [yast, dast, saas, lint, antivirus]
+        permissions:
+            contents: write
+            pull-requests: write
+            repository-projects: write
+            id-token: write
+        runs-on: ubuntu-latest
+        steps: 
+        -   name: Add label to PR
+            uses: actions/github-script@v7
+            with:
+                script: |
+                    github.rest.issues.addLabels({
+                    issue_number: context.issue.number,
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    labels: ['${{ env.LABEL_SEC }}']
+                    })
